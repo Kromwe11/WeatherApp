@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (5.8.1)
+  - SwiftFormat/CLI (0.52.10)
+  - SwiftLint (0.54.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - SwiftFormat/CLI
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - SwiftFormat
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  SwiftFormat: ffd19286990ae717ca1729b853a75a439dfcf77a
+  SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
+
+PODFILE CHECKSUM: 8c34d2b1a034cc759e2efa0f525b589e3f283dd7
+
+COCOAPODS: 1.14.3
