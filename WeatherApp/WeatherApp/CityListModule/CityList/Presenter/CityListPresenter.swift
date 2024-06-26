@@ -9,7 +9,7 @@ import Foundation
 
 final class CityListPresenter: CityListPresenterProtocol {
     // MARK: - Public properties
-    weak var view: CityListViewProtocol?
+    weak var view: CityListPresenterOutput?
     var interactor: CityListInteractorInputProtocol?
     var router: CityListRouterProtocol?
     var networkManager: NetworkManagingProtocol?
@@ -21,7 +21,7 @@ final class CityListPresenter: CityListPresenterProtocol {
     
     // MARK: - Configuration
     func configure(
-        view: CityListViewProtocol,
+        view: CityListPresenterOutput,
         interactor: CityListInteractorInputProtocol,
         router: CityListRouterProtocol,
         networkManager: NetworkManagingProtocol

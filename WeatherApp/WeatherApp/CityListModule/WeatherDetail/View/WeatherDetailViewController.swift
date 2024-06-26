@@ -1,17 +1,14 @@
 //
-//  WeatherDetailViewController.swift
-//  WeatherApp
+// WeatherDetailViewController.swift
+// WeatherApp
 //
-//  Created by Висент Щепетков on 25.06.2024.
+// Created by Висент Щепетков on 25.06.2024.
 //
 
 import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     
-    // MARK: - Public properties
-    var presenter: WeatherDetailPresenterProtocol?
-
     // MARK: - Private properties
     private let cityNameLabel = UILabel()
     private let currentDateLabel = UILabel()
@@ -22,7 +19,7 @@ final class WeatherDetailViewController: UIViewController {
         items: [Constants.forecastSegment3Days, Constants.forecastSegment7Days]
     )
     private let forecastTableView = UITableView()
-
+    private var presenter: WeatherDetailPresenterProtocol?
     private var forecastData: [ForecastViewModel] = []
 
     private enum Constants {
@@ -41,8 +38,7 @@ final class WeatherDetailViewController: UIViewController {
         static let errorTitle = "Error"
         static let okActionTitle = "OK"
         static let forecastCellIdentifier = "ForecastCell"
-        static let weatherIconUrlPrefix = "https://openweathermap.org/img/wn/"
-        static let weatherIconUrlSuffix = "@2x.png"
+        static let dateFormat = "E, d MMM"
     }
 
     // MARK: - Lifecycle
@@ -54,6 +50,11 @@ final class WeatherDetailViewController: UIViewController {
         presenter?.viewDidLoad()
         forecastSegmentedControl.addTarget(self, action: #selector(forecastPeriodChanged(_:)), for: .valueChanged)
         forecastSegmentedControl.selectedSegmentIndex = 0
+    }
+    
+    // MARK: - Configuration
+    func configure(presenter: WeatherDetailPresenterProtocol) {
+        self.presenter = presenter
     }
 
     // MARK: - Private Methods
@@ -133,15 +134,15 @@ final class WeatherDetailViewController: UIViewController {
     }
 }
 
-// MARK: - WeatherDetailViewProtocol
-extension WeatherDetailViewController: WeatherDetailViewProtocol {
+// MARK: - WeatherDetailPresenterOutput
+extension WeatherDetailViewController: WeatherDetailPresenterOutput {
     func showWeatherDetails(_ weatherDetails: WeatherViewModel) {
         cityNameLabel.text = weatherDetails.city
         currentDateLabel.text = Constants.todayText
         temperatureLabel.text = weatherDetails.temperature
         weatherDescriptionLabel.text = weatherDetails.description
-        if let iconUrl = URL(string: "\(Constants.weatherIconUrlPrefix)\(weatherDetails.icon)\(Constants.weatherIconUrlSuffix)") {
-            weatherIconImageView.load(url: iconUrl)
+        presenter?.loadImage(for: weatherDetails.icon) { [weak self] image in
+            self?.weatherIconImageView.image = image
         }
     }
 
@@ -170,10 +171,12 @@ extension WeatherDetailViewController: UITableViewDataSource {
         let forecast = forecastData[indexPath.row]
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, d MMM"
+        dateFormatter.dateFormat = Constants.dateFormat
         let dateString = dateFormatter.string(from: forecast.date)
 
-        cell.configure(date: dateString, temperature: forecast.temperature, description: forecast.description, icon: forecast.icon)
+        presenter?.loadImage(for: forecast.icon) { image in
+            cell.configure(date: dateString, temperature: forecast.temperature, description: forecast.description, icon: image)
+        }
 
         return cell
     }

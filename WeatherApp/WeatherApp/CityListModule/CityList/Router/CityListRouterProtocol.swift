@@ -18,5 +18,5 @@ protocol CityListRouterProtocol: AnyObject {
     ///   - view: Представление, из которого выполняется навигация.
     ///   - city: Название города.
     ///   - weatherData: Данные о погоде для города.
-    func navigateToWeatherDetail(from view: CityListViewProtocol, for city: String, with weatherData: CityWeather)
+    func navigateToWeatherDetail(from view: CityListPresenterOutput, for city: String, with weatherData: CityWeather)
 }

@@ -8,8 +8,6 @@
 import UIKit
 
 final class CityListViewController: UIViewController {
-    // MARK: - Public properties
-    var presenter: CityListPresenterProtocol?
     
     // MARK: - Private properties
     private var cities: [CityWeather] = []
@@ -21,6 +19,7 @@ final class CityListViewController: UIViewController {
         static let errorTitle = "Error"
         static let okActionTitle = "OK"
     }
+    private var presenter: CityListPresenterProtocol?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -28,6 +27,20 @@ final class CityListViewController: UIViewController {
         setupNavigationBar()
         setupTableView()
         presenter?.viewDidLoad()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismissKeyboard()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        deselectAllRows()
+    }
+    // MARK: - Configuration
+    func configure(presenter: CityListPresenterProtocol) {
+        self.presenter = presenter
     }
     
     // MARK: - Private Methods
@@ -55,6 +68,18 @@ final class CityListViewController: UIViewController {
         ])
     }
     
+    private func deselectAllRows() {
+        if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
+            for indexPath in selectedIndexPaths {
+                tableView.deselectRow(at: indexPath, animated: false)
+            }
+        }
+    }
+    
+    private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     // MARK: - Actions
     @objc private func promptForCity() {
         guard let networkManager = presenter?.networkManager else { return }
@@ -68,8 +93,8 @@ final class CityListViewController: UIViewController {
     }
 }
 
-// MARK: - CityListViewProtocol
-extension CityListViewController: CityListViewProtocol {
+// MARK: - CityListPresenterOutput
+extension CityListViewController: CityListPresenterOutput {
     func showCities(_ cities: [CityWeather]) {
         self.cities = cities
         tableView.reloadData()

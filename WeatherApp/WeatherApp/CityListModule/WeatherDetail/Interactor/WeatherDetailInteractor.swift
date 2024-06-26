@@ -1,32 +1,35 @@
 //
-//  WeatherDetailInteractor.swift
-//  WeatherApp
+// WeatherDetailInteractor.swift
+// WeatherApp
 //
-//  Created by Висент Щепетков on 25.06.2024.
+// Created by Висент Щепетков on 25.06.2024.
 //
 
-import Foundation
+import UIKit
 
 final class WeatherDetailInteractor: WeatherDetailInteractorInputProtocol {
-    
-    // MARK: - Public properties
-    weak var presenter: WeatherDetailInteractorOutputProtocol?
-    
+        
     // MARK: - Private properties
     private var networkManager: NetworkManagingProtocol?
     private var city: String?
-    
+    private weak var presenter: WeatherDetailInteractorOutputProtocol?
+    private var imageLoadingService: ImageLoadingServiceProtocol?
+
     private enum Constants {
         static let weatherErrorDomain = "WeatherDetailInteractor"
         static let weatherErrorCode = 1
         static let weatherErrorMessage = "Не удалось получить данные о погоде"
         static let forecastErrorMessage = "Не удалось получить данные о прогнозе"
+        static let iconUrlPrefix = "https://openweathermap.org/img/wn/"
+        static let iconUrlSuffix = "@2x.png"
     }
     
     // MARK: - Configuration
-    func configure(city: String, networkManager: NetworkManagingProtocol) {
+    func configure(city: String, networkManager: NetworkManagingProtocol, presenter: WeatherDetailInteractorOutputProtocol, imageLoadingService: ImageLoadingServiceProtocol) {
         self.city = city
         self.networkManager = networkManager
+        self.presenter = presenter
+        self.imageLoadingService = imageLoadingService
     }
     
     // MARK: - Public Methods
@@ -76,5 +79,14 @@ final class WeatherDetailInteractor: WeatherDetailInteractorInputProtocol {
                 ))
             }
         }
+    }
+    
+    func loadImage(for icon: String, completion: @escaping (UIImage?) -> Void) {
+        guard let imageLoadingService = imageLoadingService else {
+            completion(nil)
+            return
+        }
+        let iconUrl = URL(string: "\(Constants.iconUrlPrefix)\(icon)\(Constants.iconUrlSuffix)")!
+        imageLoadingService.loadImage(from: iconUrl, completion: completion)
     }
 }

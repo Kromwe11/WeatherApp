@@ -20,7 +20,7 @@ final class CityListRouter: CityListRouterProtocol {
         let presenter = CityListPresenter()
         let router = CityListRouter()
         
-        view.presenter = presenter
+        view.configure(presenter: presenter)
         presenter.configure(view: view, interactor: interactor, router: router, networkManager: networkManager)
         interactor.configure(presenter: presenter, networkManager: networkManager)
         router.viewController = view
@@ -28,10 +28,9 @@ final class CityListRouter: CityListRouterProtocol {
         return view
     }
     
-    func navigateToWeatherDetail(from view: CityListViewProtocol, for city: String, with weatherData: CityWeather) {
+    func navigateToWeatherDetail(from view: CityListPresenterOutput, for city: String, with weatherData: CityWeather) {
         let weatherDetailViewController = WeatherDetailRouter.createWeatherDetailModule(city: city, networkManager: NetworkManager())
-        if let viewController = view as? UIViewController {
-            viewController.navigationController?.pushViewController(weatherDetailViewController, animated: true)
-        }
+        guard let viewController = view as? UIViewController else { return }
+        viewController.navigationController?.pushViewController(weatherDetailViewController, animated: true)
     }
 }

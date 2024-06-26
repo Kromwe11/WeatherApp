@@ -1,8 +1,8 @@
 //
-//  WeatherDetailRouter.swift
-//  WeatherApp
+// WeatherDetailRouter.swift
+// WeatherApp
 //
-//  Created by Висент Щепетков on 25.06.2024.
+// Created by Висент Щепетков on 25.06.2024.
 //
 
 import UIKit
@@ -15,13 +15,16 @@ final class WeatherDetailRouter: WeatherDetailRouterProtocol {
         let interactor = WeatherDetailInteractor()
         let presenter = WeatherDetailPresenter()
         let router = WeatherDetailRouter()
+        let imageLoadingService = ImageLoadingService()
         
-        view.presenter = presenter
-        presenter.view = view
-        presenter.interactor = interactor
-        presenter.router = router
-        interactor.presenter = presenter
-        interactor.configure(city: city, networkManager: networkManager)
+        view.configure(presenter: presenter)
+        presenter.configure(view: view, interactor: interactor, router: router)
+        interactor.configure(
+            city: city,
+            networkManager: networkManager,
+            presenter: presenter,
+            imageLoadingService: imageLoadingService
+        )
         
         return view
     }

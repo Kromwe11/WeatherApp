@@ -1,8 +1,8 @@
 //
-//  ForecastTableViewCell.swift
-//  WeatherApp
+// ForecastTableViewCell.swift
+// WeatherApp
 //
-//  Created by Висент Щепетков on 25.06.2024.
+// Created by Висент Щепетков on 25.06.2024.
 //
 
 import UIKit
@@ -26,12 +26,10 @@ final class ForecastTableViewCell: UITableViewCell {
         static let padding: CGFloat = 15
         static let interItemSpacing: CGFloat = 5
         static let backgroundColor: UIColor = UIColor(white: 0.9, alpha: 1)
-        static let iconUrlPrefix = "https://openweathermap.org/img/wn/"
-        static let iconUrlSuffix = "@2x.png"
     }
     
     // MARK: - Public Methods
-    func configure(date: String, temperature: String, description: String, icon: String) {
+    func configure(date: String, temperature: String, description: String, icon: UIImage?) {
         if !isConfigured {
             setupViews()
             layoutViews()
@@ -41,8 +39,7 @@ final class ForecastTableViewCell: UITableViewCell {
         dateLabel.text = date
         temperatureLabel.text = temperature
         descriptionLabel.text = description.capitalized
-        let iconUrl = URL(string: "\(Constants.iconUrlPrefix)\(icon)\(Constants.iconUrlSuffix)")!
-        weatherIconImageView.load(url: iconUrl)
+        weatherIconImageView.image = icon
     }
     
     // MARK: - Private Methods

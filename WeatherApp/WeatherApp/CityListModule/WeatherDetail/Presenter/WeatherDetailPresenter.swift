@@ -5,18 +5,17 @@
 //  Created by Висент Щепетков on 25.06.2024.
 //
 
-import Foundation
+import UIKit
 
 final class WeatherDetailPresenter: WeatherDetailPresenterProtocol {
-    // MARK: - Public properties
-    weak var view: WeatherDetailViewProtocol?
-    var interactor: WeatherDetailInteractorInputProtocol?
-    var router: WeatherDetailRouterProtocol?
 
     // MARK: - Private properties
     private enum Constants {
         static let defaultForecastDays = 3
     }
+    private weak var view: WeatherDetailPresenterOutput?
+    private var interactor: WeatherDetailInteractorInputProtocol?
+    private var router: WeatherDetailRouterProtocol?
 
     // MARK: - Public Methods
     func viewDidLoad() {
@@ -26,6 +25,21 @@ final class WeatherDetailPresenter: WeatherDetailPresenterProtocol {
 
     func didChangeForecastPeriod(to days: Int) {
         interactor?.fetchForecast(days: days)
+    }
+    
+    func loadImage(for icon: String, completion: @escaping (UIImage?) -> Void) {
+        interactor?.loadImage(for: icon, completion: completion)
+    }
+
+    // MARK: - Configuration
+    func configure(
+        view: WeatherDetailPresenterOutput,
+        interactor: WeatherDetailInteractorInputProtocol,
+        router: WeatherDetailRouterProtocol
+    ) {
+        self.interactor = interactor
+        self.router = router
+        self.view = view
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  WeatherDetailViewProtocol.swift
+//  WeatherDetailPresenterOutput.swift
 //  WeatherApp
 //
 //  Created by Висент Щепетков on 25.06.2024.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Протокол для представления деталей погоды.
-protocol WeatherDetailViewProtocol: AnyObject {
+protocol WeatherDetailPresenterOutput: AnyObject {
     /// Показать подробную информацию о погоде.
     /// - Parameter weatherDetails: Модель данных о погоде.
     func showWeatherDetails(_ weatherDetails: WeatherViewModel)

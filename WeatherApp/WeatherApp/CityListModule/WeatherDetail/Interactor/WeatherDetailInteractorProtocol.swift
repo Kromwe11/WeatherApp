@@ -5,7 +5,7 @@
 //  Created by Висент Щепетков on 25.06.2024.
 //
 
-import Foundation
+import UIKit
 
 /// Протокол для интерактора входящих данных деталей погоды.
 protocol WeatherDetailInteractorInputProtocol: AnyObject {
@@ -15,6 +15,11 @@ protocol WeatherDetailInteractorInputProtocol: AnyObject {
     /// Получить прогноз погоды.
     /// - Parameter days: Количество дней прогноза.
     func fetchForecast(days: Int)
+    
+    /// Загрузить изображение для иконки погоды.
+    /// - Parameter icon: Название иконки.
+    /// - Parameter completion: Замыкание с результатом загрузки изображения.
+    func loadImage(for icon: String, completion: @escaping (UIImage?) -> Void)
 }
 
 /// Протокол для интерактора выходящих данных деталей погоды.
